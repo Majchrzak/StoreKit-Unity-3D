@@ -55,7 +55,7 @@ public class Example : MonoBehaviour, IStoreDelegate
 	/// Handles the request success event.
 	/// </summary>
 	/// <param name="identifier">product identifier.</param>
-	public void OnStoreRequestSuccess(IEnumerable<Product> products)
+	public void OnStoreRequestSuccess(IEnumerable<StoreProduct> products)
 	{
 	}
 	
