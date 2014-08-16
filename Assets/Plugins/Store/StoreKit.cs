@@ -1,5 +1,5 @@
 ﻿/*
- *  The MIT License (MIT)
+ *	The MIT License (MIT)
  *
  *	Copyright (c) 2014 Mateusz Majchrzak
  *
@@ -62,11 +62,6 @@ namespace Store
 		{ 
 			get { return USKCanMakePayments(); }
 		}
-		
-		/// <summary>
-		/// Returns products that are available in store.
-		/// </summary>
-		public IEnumerable<Product> Shelf { get; private set; }
 
 		/// <summary>
 		/// Initialize StoreKit instance.
@@ -83,8 +78,6 @@ namespace Store
 		/// <param name="handler"></param>
 		public void Request(IEnumerable<string> products)
 		{
-			Shelf = null;
-
 			USKRequest(products.ToArray(), products.Count());
 		}
 
@@ -114,10 +107,10 @@ namespace Store
 			IntPtr source = IntPtr.Zero;
 			int size = USKGetProducts(out source);
 
-			Shelf = ObjCMarshalArray<Product>(source, size, new Product[0]);
+			IEnumerable<StoreProduct> shelf = ObjCMarshalArray<StoreProduct>(source, size, new StoreProduct[0]);
 
 			if (Delegate != null)
-				Delegate.OnStoreRequestSuccess(Shelf);
+				Delegate.OnStoreRequestSuccess(shelf);
 		}
 
 		/// <summary>
@@ -125,8 +118,6 @@ namespace Store
 		/// </summary>
 		private void HandleRequestFailed(string error)
 		{
-			Shelf = null;
-
 			if (Delegate != null)
 				Delegate.OnStoreRequestFailed(error);
 		}

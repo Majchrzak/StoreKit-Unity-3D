@@ -1,5 +1,5 @@
 ﻿/*
- *  The MIT License (MIT)
+ *	The MIT License (MIT)
  *
  *	Copyright (c) 2014 Mateusz Majchrzak
  *
@@ -36,7 +36,7 @@ namespace Store
 		/// Handles the request success event.
 		/// </summary>
 		/// <param name="identifier">product identifier.</param>
-		void OnStoreRequestSuccess(IEnumerable<Product> products);
+		void OnStoreRequestSuccess(IEnumerable<StoreProduct> products);
 		
 		/// <summary>
 		/// Handles the request failed event.

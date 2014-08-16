@@ -1,5 +1,5 @@
 ﻿/*
- *  The MIT License (MIT)
+ *	The MIT License (MIT)
  *
  *	Copyright (c) 2014 Mateusz Majchrzak
  *
@@ -42,11 +42,6 @@ namespace Store
 		/// Checks that store is available on the current device.
 		/// </summary>
 		bool IsAvailable { get; }
-
-		/// <summary>
-		/// Returns products that are available in store.
-		/// </summary>
-		IEnumerable<Product> Shelf { get; }
 
         /// <summary>
         /// Downloads products data form store.

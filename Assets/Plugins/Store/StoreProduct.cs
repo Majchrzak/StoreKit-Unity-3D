@@ -1,5 +1,5 @@
 ﻿/*
- *  The MIT License (MIT)
+ *	The MIT License (MIT)
  *
  *	Copyright (c) 2014 Mateusz Majchrzak
  *
@@ -27,7 +27,7 @@ namespace Store
 	/// <summary>
 	/// Store product struct.
 	/// </summary>
-	public struct Product
+	public struct StoreProduct
 	{
 		/// <summary>
 		/// Constructor.
@@ -36,7 +36,7 @@ namespace Store
 		/// <param name="title">Product title.</param>
 		/// <param name="price">ocalized product price (with price tag).</param>
 		/// <param name="description">Localized description.</param>
-		internal Product(string id, string title, string price, string description)
+		internal StoreProduct(string id, string title, string price, string description)
 		{
 		    ID = id;
 		    Title = title;
