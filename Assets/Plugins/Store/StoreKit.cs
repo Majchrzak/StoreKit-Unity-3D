@@ -32,7 +32,7 @@ namespace Store
 	/// <summary>
 	/// Bridge class for StoreKit and Unity.
 	/// </summary>
-	public sealed class StoreKit : DataProtocol<StoreKit>, IStore
+	public sealed class StoreKit : MonoSingleton<StoreKit>, IStore
 	{
 		#region Native C functions.
 		[DllImport("__Internal")]
@@ -149,6 +149,28 @@ namespace Store
 		{
 			if (Delegate != null)
 				Delegate.OnStoreTransactionRestore(identifier);
+		}
+
+		/// <summary>
+		/// Converts native Objective-C array into C# array.
+		/// </summary>
+		private T[] ObjCMarshalArray<T>(IntPtr source, int length, T[] @default) where T : new()
+		{
+			if (source == IntPtr.Zero || length == 0)
+				return @default;
+			
+			T[] array = new T[length];
+			
+			for (int i = 0; i < length; i++)
+			{
+				int offset = Marshal.SizeOf(typeof(T)) * i;
+				
+				array[i] = (T)Marshal.PtrToStructure(new IntPtr(source.ToInt32() + offset), typeof(T));
+			}
+			
+			Marshal.FreeHGlobal(source);
+			
+			return array;
 		}
 	}
 }

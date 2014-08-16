@@ -1,7 +1,7 @@
 StoreKit plugin for Unity 3D
 =========
 ---
-Simple and complex Apple StoreKit implementation:
+Simple and compact Apple StoreKit implementation:
 
   - Buy consumable and non-consumable products.
   - Fetch products from AppStore.

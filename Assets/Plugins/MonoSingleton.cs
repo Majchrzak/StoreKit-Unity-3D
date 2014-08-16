@@ -23,63 +23,55 @@
  */
 
 using UnityEngine;
-using System;
-using System.Runtime.InteropServices;
 
 /// <summary>
-/// Base protocol class that connects native device API and Unity layer.
+/// 
 /// </summary>
-public abstract class DataProtocol<T> : MonoBehaviour where T : class
+public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
 {
 	/// <summary>
-	/// Singleton instance.
+	/// 
 	/// </summary>
 	private static T _Instance;
 
+	private static bool _WasDestryed;
+
 	/// <summary>
-	/// Returns class instance.
+	/// singleton property
 	/// </summary>
 	public static T Instance
 	{
-		get
-		{
-			if (_Instance == null)
-			{
-				_Instance = GameObject.FindObjectOfType(typeof(T)) as T;
-				
-				if (_Instance == null)
-				{
-					GameObject gameObject = new GameObject(typeof(T).Name);
-					GameObject.DontDestroyOnLoad(gameObject);
-					
-					_Instance = gameObject.AddComponent(typeof(T)) as T;
-				}
-			}
-			
-			return _Instance;
-		}
+	    get
+	    {
+	        if (_WasDestryed)
+	            return null;
+
+	        if (_Instance == null)
+	        {
+	            _Instance = GameObject.FindObjectOfType(typeof(T)) as T;
+
+	            if (_Instance == null)
+	            {
+	                GameObject gameObject = new GameObject(typeof(T).Name);
+	                GameObject.DontDestroyOnLoad(gameObject);
+
+	                _Instance = gameObject.AddComponent(typeof(T)) as T;
+	            }
+	        }
+
+	        return _Instance;
+	    }
 	}
 
 	/// <summary>
-	/// Converts native Objective-C array into C# array.
+	/// 
 	/// </summary>
-	protected U[] ObjCMarshalArray<U>(IntPtr source, int length, U[] @default) where U : new()
+	protected virtual void OnDestroy()
 	{
-		if (source == IntPtr.Zero || length == 0)
-			return @default;
+	    if (_Instance)
+	        Destroy(_Instance);
 
-		U[] array = new U[length];
-		
-		for (int i = 0; i < length; i++)
-		{
-			int offset = Marshal.SizeOf(typeof(U)) * i;
-			
-			array[i] = (U)Marshal.PtrToStructure(new IntPtr(source.ToInt32() + offset), typeof(U));
-		}
-		
-		Marshal.FreeHGlobal(source);
-		
-		return array;
+	    _Instance = null;
+	    _WasDestryed = true;
 	}
-
 }
