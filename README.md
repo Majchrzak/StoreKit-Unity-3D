@@ -7,38 +7,61 @@ Simple and complex Apple StoreKit implementation:
   - Fetch products from AppStore.
   - Restore finished transactions.
 
-Installation
+Bootstrap
 --------------
 
+Create IStoreDelegate implementation:
 ```sh
-/// <summary>
-/// Handles the request success event.
-/// </summary>
-/// <param name="identifier">product identifier.</param>
-void OnStoreRequestSuccess(IEnumerable<StoreProduct> products);
-		
-/// <summary>
-/// Handles the request failed event.
-/// </summary>
-void OnStoreRequestFailed(string error);
-		
-/// <summary>
-/// Handles the transaction success event.
-/// </summary>
-/// <param name="identifier">product identifier.</param>
-void OnStoreTransactionSuccess(string identifier);
-		
-/// <summary>
-/// Handles the transaction failed event.
-/// </summary>
-/// <param name="identifier">product identifier.</param>
-void OnStoreTransactionFailed(string identifier);
-		
-/// <summary>
-/// Handles the transaction restore event.
-/// </summary>
-/// <param name="identifier">product identifier.</param>
-void OnStoreTransactionRestore(string identifier);
+public class StoreService : Store.IStoreDelegate
+{
+    /// Handles the request success event.
+    void OnStoreRequestSuccess(IEnumerable<Store.StoreProduct> products)
+    {
+    }
+    		
+    /// Handles the request failed event.
+    void OnStoreRequestFailed(string error)
+    {
+    }
+    		
+    /// Handles the transaction success event.
+    void OnStoreTransactionSuccess(string identifier)
+    {
+    }
+    		
+    /// Handles the transaction failed event.
+    void OnStoreTransactionFailed(string identifier)
+    {
+    }
+    
+    /// Handles the transaction restore event.
+    void OnStoreTransactionRestore(string identifier)
+    {
+    }
+}
+```
+Instantiate StoreKit and set IStoreDelegate target:
+```sh
+private void Awake()
+{
+    Store.StoreKit.Instance.Delegate = new StoreService();
+}
+```
+
+Request and buy product:
+```sh
+private string m_ProductID = '"com.game.product";
+
+private void Awake()
+{
+    Store.IStore store = Store.StoreKit.Instance;
+
+    if (!store.IsAvailable)
+        return;
+
+    store.Request(new [] { m_ProductID });
+    store.Purchase(m_ProductID);
+}
 ```
 
 Version
