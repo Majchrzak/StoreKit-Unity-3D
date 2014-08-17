@@ -15,27 +15,27 @@ Create IStoreDelegate implementation:
 public class StoreService : Store.IStoreDelegate
 {
     /// Handles the request success event.
-    void OnStoreRequestSuccess(IEnumerable<Store.StoreProduct> products)
+    public void OnStoreRequestSuccess(IEnumerable<Store.StoreProduct> products)
     {
     }
     		
     /// Handles the request failed event.
-    void OnStoreRequestFailed(string error)
+    public void OnStoreRequestFailed(string error)
     {
     }
     		
     /// Handles the transaction success event.
-    void OnStoreTransactionSuccess(string identifier)
+    public void OnStoreTransactionSuccess(string identifier)
     {
     }
     		
     /// Handles the transaction failed event.
-    void OnStoreTransactionFailed(string identifier)
+    public void OnStoreTransactionFailed(string identifier)
     {
     }
     
     /// Handles the transaction restore event.
-    void OnStoreTransactionRestore(string identifier)
+    public void OnStoreTransactionRestore(string identifier)
     {
     }
 }
