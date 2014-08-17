@@ -34,7 +34,7 @@ namespace Store
 	/// </summary>
 	public sealed class StoreKit : MonoSingleton<StoreKit>, IStore
 	{
-		#region Native C functions.
+#if UNITY_IOS && !UNITY_EDITOR
 		[DllImport("__Internal")]
 		private static extern void USKInit(string targetClass);
 		[DllImport("__Internal")]
@@ -47,7 +47,7 @@ namespace Store
 		private static extern void USKPurchase(string identifier);
 		[DllImport("__Internal")]
 		private static extern void USKRestore();
-		#endregion
+#endif
 
 		/// <summary>
 		/// Gets or sets the delegate.
@@ -60,7 +60,14 @@ namespace Store
 		/// </summary>
 		public bool IsAvailable 
 		{ 
-			get { return USKCanMakePayments(); }
+			get 
+			{ 
+#if UNITY_IOS && !UNITY_EDITOR
+				return USKCanMakePayments(); 
+#else
+				return false;
+#endif
+			}
 		}
 
 		/// <summary>
@@ -68,7 +75,9 @@ namespace Store
 		/// </summary>
 		private void Awake()
 		{
+#if UNITY_IOS && !UNITY_EDITOR
 			USKInit(gameObject.name);
+#endif
 		}
 
 		/// <summary>
@@ -78,7 +87,9 @@ namespace Store
 		/// <param name="handler"></param>
 		public void Request(IEnumerable<string> products)
 		{
+#if UNITY_IOS && !UNITY_EDITOR
 			USKRequest(products.ToArray(), products.Count());
+#endif
 		}
 
 		/// <summary>
@@ -88,7 +99,9 @@ namespace Store
 		/// <param name="handler"></param>
 		public void Purchase(string productIdentifier)
 		{
+#if UNITY_IOS && !UNITY_EDITOR
 			USKPurchase(productIdentifier);
+#endif
 		}
 
 		/// <summary>
@@ -96,7 +109,9 @@ namespace Store
 		/// </summary>
 		public void Restore()
 		{
+#if UNITY_IOS && !UNITY_EDITOR
 			USKRestore();
+#endif
 		}
 
 		/// <summary>
@@ -105,7 +120,11 @@ namespace Store
 		private void HandleRequestSuccess()
 		{
 			IntPtr source = IntPtr.Zero;
-			int size = USKGetProducts(out source);
+			int size = 0;
+
+#if UNITY_IOS && !UNITY_EDITOR
+			size = USKGetProducts(out source);
+#endif
 
 			IEnumerable<StoreProduct> shelf = ObjCMarshalArray<StoreProduct>(source, size, new StoreProduct[0]);
 
